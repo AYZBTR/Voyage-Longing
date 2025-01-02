@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing.js")
 const path = require("path");
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/voyagelonging";
 
@@ -76,20 +77,8 @@ app.delete("/listings/:id", async(req,res)=>{
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
     res.redirect("/listings");
-})
-/* app.get("/testListing", async (req, res) => {
-  let sampleListing = new Listing({
-    title: "My New Villa",
-    description: "By the beach",
-    price: 1200,
-    location: "Satama, Helsinki",
-    country: "Finland",
-  });
+});
 
-  await sampleListing.save(); //Saves this document to the MongoDB databse.
-  console.log("Sample was saved");
-  res.send("successfull testing")
-}); */
 
 app.listen(8080, () => {
   console.log("Server is listening to port 8080!");
