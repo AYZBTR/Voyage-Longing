@@ -72,8 +72,6 @@ app.post("/listings", validateListing, wrapAsync(async (req, res, next) => {
   const newListing = new Listing(req.body.listing);
   await newListing.save();
   res.redirect("/listings");
-
-
 }));
 
 //Edit Route
