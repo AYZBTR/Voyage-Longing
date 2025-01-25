@@ -10,6 +10,8 @@ const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 const Review = require("./models/review.js");
 
+const listings = require("./Routes/listing.js")
+
 const MONGO_URL = "mongodb://127.0.0.1:27017/voyagelonging";
 
 main()
@@ -57,6 +59,7 @@ const validateReview = (req, res, next) => {
   }
 };
 
+app.use("/listings", listings);
 
 
 //Reveiws
