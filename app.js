@@ -10,7 +10,8 @@ const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 const Review = require("./models/review.js");
 
-const listings = require("./Routes/listing.js")
+const listings = require("./Routes/listing.js");
+const reviews = require("./Routes/review.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/voyagelonging";
 
@@ -51,29 +52,9 @@ const validateReview = (req, res, next) => {
 };
 
 app.use("/listings", listings);
+app.use("/listings/:id/reveiws", reviews);
 
 
-//Reveiws
-//Post review Route
-app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
-  let listing = await Listing.findById(req.params.id);
-  let newReview = new Review(req.body.review);
-  listing.reviews.push(newReview);
-  await newReview.save();
-  await listing.save();
-  res.redirect(`/listings/${listing._id}`);
-}));
-
-//Delete review route
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
-  let { id, reviewId } = req.params;
-
-  await Listing.findByIdAndUpdate(id, {$pull: { reviews: reviewId}});
-  await Review.findByIdAndDelete(reviewId);
-
-  res.redirect(`/listings/${id}`)
-})
-);
 
 
 app.all("*", (req, res, next) => {
