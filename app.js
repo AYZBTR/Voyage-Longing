@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
+const flash = require("connect-flash");
 
 
 const listings = require("./Routes/listing.js");
@@ -44,12 +45,17 @@ const sessionOptions = {
   }
 };
 
-app.use(session(sessionOptions));
-
 app.get("/", (req, res) => {
   res.send("Hi, from Root!");
 });
 
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req, res, next) =>{
+  res.locals.success = req.flash("success");
+  next();
+})
 
 // Mounting routers to handle requests for listings and reviews of specific listings by their ID.
 app.use("/listings", listings);
