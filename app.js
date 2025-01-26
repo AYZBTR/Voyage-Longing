@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 
 // Mounting routers to handle requests for listings and reviews of specific listings by their ID.
 app.use("/listings", listings);
-app.use("/listings/:id/reveiws", reviews);
+app.use("/listings/:id/reviews", reviews);
 
 //Error Handler Middlewares
 app.all("*", (req, res, next) => {
