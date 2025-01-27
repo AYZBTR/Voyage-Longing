@@ -69,7 +69,7 @@ app.use((req, res, next) => {
   next();
 })
 
-app.get("/demouser", async (req, res) => {
+/* app.get("/demouser", async (req, res) => {
   let fakeUser = new User({
     email: "fakeuser1@email.com",
     username: "Fakeuser-01"
@@ -77,7 +77,7 @@ app.get("/demouser", async (req, res) => {
 
   let registeredUser = await User.register(fakeUser, "fakeuser1password")
   res.send(registeredUser);
-})
+}) */
 
 // Mounting routers to handle requests for listings and reviews of specific listings by their ID.
 app.use("/listings", listingRouter);
