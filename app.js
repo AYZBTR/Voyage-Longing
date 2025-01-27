@@ -11,8 +11,10 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
-const listings = require("./Routes/listing.js");
-const reviews = require("./Routes/review.js");
+const listingRouter = require("./Routes/listing.js");
+const reviewRouter = require("./Routes/review.js");
+const userRouter = require("./Routes/user.js");
+
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/voyagelonging";
 
@@ -78,8 +80,9 @@ app.get("/demouser", async (req, res) => {
 })
 
 // Mounting routers to handle requests for listings and reviews of specific listings by their ID.
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
 
 //Error Handler Middlewares
 app.all("*", (req, res, next) => {
