@@ -7,7 +7,9 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
 const flash = require("connect-flash");
-
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 const listings = require("./Routes/listing.js");
 const reviews = require("./Routes/review.js");
@@ -38,9 +40,9 @@ const sessionOptions = {
   secret: "Ap5!89jhcdajnch",
   resave: false,
   saveUninitialized: true,
-  cookie:{
+  cookie: {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-    maxAge:  7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true
   }
 };
@@ -52,10 +54,27 @@ app.get("/", (req, res) => {
 app.use(session(sessionOptions));
 app.use(flash());
 
-app.use((req, res, next) =>{
+//authentication part
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
+})
+
+app.get("/demouser", async (req, res) => {
+  let fakeUser = new User({
+    email: "fakeuser1@email.com",
+    username: "Fakeuser-01"
+  })
+
+  let registeredUser = await User.register(fakeUser, "fakeuser1password")
+  res.send(registeredUser);
 })
 
 // Mounting routers to handle requests for listings and reviews of specific listings by their ID.
